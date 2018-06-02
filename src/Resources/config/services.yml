@@ -1,0 +1,29 @@
+services:
+    bite_codes_component_taxonomy.doctrine_listener.taxonomy_listener:
+        class: BiteCodes\TaxonomyBundle\Doctrine\Listener\TaxonomyListener
+        arguments:
+            - '@annotations.reader'
+        tags:
+            - { name: doctrine.event_subscriber, priority: 100 }
+
+    bite_codes_component_taxonomy.doctrine_listener.taxonomy_event_subscriber:
+        class: BiteCodes\TaxonomyBundle\Doctrine\Listener\TaxonomyEventSubscriber
+        arguments:
+            - '@annotations.reader'
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    bite_codes_component_taxonomy.form.taxonomy_root_type:
+        class: BiteCodes\TaxonomyBundle\Form\TaxonomyRootType
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: form.type }
+
+    bite_codes_component_taxonomy.command.taxonomy_update_command:
+        class: BiteCodes\TaxonomyBundle\Command\TaxonomyUpdateCommand
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@annotations.reader'
+        tags:
+            - { name: console.command }
