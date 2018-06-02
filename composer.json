@@ -27,9 +27,8 @@
     "sort-packages": true
   },
   "autoload": {
-    "psr-0": {
+    "psr-4": {
       "BiteCodes\\TaxonomyBundle\\": "src/"
     }
-  },
-  "target-dir": "BiteCodes/TaxonomyBundle"
+  }
 }
