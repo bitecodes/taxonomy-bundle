@@ -7,7 +7,7 @@ use BiteCodes\TaxonomyBundle\Entity\BaseTaxonomy;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Inflector\Inflector;
-use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
+use Doctrine\Common\Persistence\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
