@@ -6,11 +6,12 @@
   "authors": [
     {
       "name": "Thomas Uhlmann",
-      "email": "tho.uhlmann@gmail.com"
+      "email": "thomas@bite.codes"
     }
   ],
   "require": {
     "doctrine/orm": "^2.5",
+    "doctrine/doctrine-bundle": "^1.6",
     "gedmo/doctrine-extensions": "^2.4",
     "symfony/config": "^4.0",
     "symfony/console": "^4.0",
@@ -18,10 +19,12 @@
     "symfony/doctrine-bridge": "^4.0",
     "symfony/form": "^4.0",
     "symfony/http-kernel": "^4.0",
-    "symfony/options-resolver": "^4.0"
+    "symfony/options-resolver": "^4.0",
+    "symfony/validator": "^4.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^6.5"
+    "phpunit/phpunit": "^6.5",
+    "symfony/yaml": "^4.1"
   },
   "config": {
     "sort-packages": true
@@ -29,6 +32,11 @@
   "autoload": {
     "psr-4": {
       "BiteCodes\\TaxonomyBundle\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "BiteCodes\\TaxonomyBundle\\Test\\": "tests/"
     }
   }
 }

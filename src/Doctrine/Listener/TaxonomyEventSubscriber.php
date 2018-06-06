@@ -4,6 +4,7 @@ namespace BiteCodes\TaxonomyBundle\Doctrine\Listener;
 
 use BiteCodes\TaxonomyBundle\Doctrine\Annotation\TaxonomyMapping;
 use BiteCodes\TaxonomyBundle\Entity\Taxonomy;
+use BiteCodes\TaxonomyBundle\Repository\TaxonomyRepository;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
@@ -47,6 +48,7 @@ class TaxonomyEventSubscriber implements EventSubscriber
      */
     protected function validateTaxonomies(LifecycleEventArgs $args)
     {
+        $om = $args->getObjectManager();
         $entity = $args->getObject();
 
         $refl = new \ReflectionClass($entity);
@@ -64,11 +66,10 @@ class TaxonomyEventSubscriber implements EventSubscriber
                         }
 
                         if (!$taxonomy->getParent()) {
-                            throw new \Exception("A root taxonomy '{$taxonomy->getTitle()}' was given. Entites should not be directly linked to roots.");
-                        }
-
-                        if ($configuration->root !== $taxonomy->getRoot()->getTitle()) {
-                            throw new \Exception("The root of this taxonomy has to be '$configuration->root'. A Taxonomy of type '{$root->getTitle()}' was given.");
+                            /** @var TaxonomyRepository $repo */
+                            $repo = $om->getRepository($configuration->targetEntity);
+                            $root = $repo->findRoot($configuration->root);
+                            $taxonomy->setParent($root);
                         }
                     }
                 }

@@ -1,0 +1,8 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+#    Doctrine\ORM\EntityManagerInterface:
+#        alias: '@doctrine.orm.entity_manager'

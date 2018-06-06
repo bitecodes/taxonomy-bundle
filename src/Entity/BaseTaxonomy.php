@@ -32,19 +32,19 @@ class BaseTaxonomy
      * @Gedmo\TreeLeft
      * @ORM\Column(type="integer")
      */
-    protected $lft;
+    protected $lft = 0;
 
     /**
      * @Gedmo\TreeLevel
      * @ORM\Column(type="integer")
      */
-    protected $lvl;
+    protected $lvl = 0;
 
     /**
      * @Gedmo\TreeRight
      * @ORM\Column(type="integer")
      */
-    protected $rgt;
+    protected $rgt = 0;
 
     /**
      * @Gedmo\TreeRoot
@@ -65,6 +65,11 @@ class BaseTaxonomy
     {
         $this->title = $title;
         $this->children = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->title;
     }
 
     /**

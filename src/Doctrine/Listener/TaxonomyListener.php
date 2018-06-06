@@ -124,7 +124,7 @@ class TaxonomyListener implements EventSubscriber
      */
     protected function getManyToOneMapping(\ReflectionProperty $property, TaxonomyMapping $configuration)
     {
-        $name = $this->getNormalizedName($property->getName());
+        $name = $property->getName();
 
         if ($idAnnot = $this->reader->getPropertyAnnotation($property, Id::class)) {
             $mapping['id'] = true;
@@ -138,7 +138,6 @@ class TaxonomyListener implements EventSubscriber
             ],
         ];
         $mapping['cascade'] = [];
-        $mapping['inversedBy'] = 'entites';
         $mapping['targetEntity'] = $configuration->targetEntity;
         $mapping['fetch'] = TaxonomyMapping::FETCH_STRATEGIES[$configuration->fetch];
 
@@ -152,7 +151,7 @@ class TaxonomyListener implements EventSubscriber
      */
     protected function getManyToManyMapping(\ReflectionProperty $property, TaxonomyMapping $configuration)
     {
-        $name = $this->getNormalizedName($property->getName(), true);
+        $name = $property->getName();
         $mapping['fieldName'] = $name;
 
         $joinTable = [
@@ -163,8 +162,7 @@ class TaxonomyListener implements EventSubscriber
         $mapping['joinTable'] = $joinTable;
         $mapping['targetEntity'] = $configuration->targetEntity;
         $mapping['mappedBy'] = null;
-        $mapping['inversedBy'] = 'entities';
-        $mapping['cascade'] = [];
+        $mapping['cascade'] = ['persist'];
         $mapping['indexBy'] = 'id';
         $mapping['orphanRemoval'] = false;
         $mapping['fetch'] = TaxonomyMapping::FETCH_STRATEGIES[$configuration->fetch];

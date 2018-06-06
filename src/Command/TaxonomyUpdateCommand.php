@@ -2,10 +2,7 @@
 
 namespace BiteCodes\TaxonomyBundle\Command;
 
-use BiteCodes\TaxonomyBundle\Doctrine\Annotation\TaxonomyMapping;
-use Doctrine\Common\Annotations\Reader;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Mapping\ClassMetadata;
+use BiteCodes\TaxonomyBundle\Services\TaxonomyManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,20 +10,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 class TaxonomyUpdateCommand extends Command
 {
     /**
-     * @var EntityManager
+     * @var TaxonomyManager
      */
-    private $em;
-    /**
-     * @var Reader
-     */
-    private $reader;
+    private $taxonomyManager;
 
-    public function __construct(EntityManager $em, Reader $reader)
+    public function __construct(TaxonomyManager $taxonomyManager)
     {
         parent::__construct();
 
-        $this->em = $em;
-        $this->reader = $reader;
+        $this->taxonomyManager = $taxonomyManager;
     }
 
     protected function configure()
@@ -38,28 +30,6 @@ class TaxonomyUpdateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var ClassMetadata[] $metadata */
-        $metadata = $this->em->getMetadataFactory()->getAllMetadata();
-
-        foreach ($metadata as $meta) {
-            $properties = $meta->getReflectionClass()->getProperties();
-
-            foreach ($properties as $property) {
-                /** @var TaxonomyMapping $configuration */
-                if ($configuration = $this->reader->getPropertyAnnotation($property, TaxonomyMapping::class)) {
-                    $root = $configuration->root;
-
-                    $taxonomyRepo = $this->em->getRepository($configuration->targetEntity);
-
-                    if (!$taxonomyRepo->findOneBy(['title' => $root])) {
-                        $rootTaxonomy = new $configuration->targetEntity($root);
-
-                        $this->em->persist($rootTaxonomy);
-                    }
-                }
-            }
-        }
-
-        $this->em->flush();
+        $this->taxonomyManager->updateRootTaxonomies();
     }
 }
